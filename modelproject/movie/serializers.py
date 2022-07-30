@@ -1,6 +1,7 @@
+
 from rest_framework import serializers
 from dataclasses import field
-from .models import Movie, Staff
+from .models import Movie, Staff, Comment
 
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,4 +14,9 @@ class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'Movies', 'user', 'created_at', 'comment']
         read_only_fields = ['id']
