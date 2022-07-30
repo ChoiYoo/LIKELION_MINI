@@ -1,6 +1,6 @@
-from django.shortcuts import render
-from .models import Movie, Comment
-from .serializers import MovieSerializer, CommentSerializer
+from django.shortcuts import redirect, render
+from .models import Movie, Comment, Staff
+from .serializers import MovieSerializer, CommentSerializer, StaffSerializer
 from rest_framework.decorators import api_view, authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,29 +9,35 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 import requests
 
-
+@api_view(['GET'])
 def init_db(request):
-    url = "https://46f95f3a-8415-41f5-8848-c23892b059bb.mock.pstmn.io/movies"
+    url = "https://334e6eae-a450-4bd1-93ba-cd6f24271194.mock.pstmn.io/movie/movielist"
     res = requests.get(url)
     movies = res.json()['movies']
+    
     for movie in movies:
-        title_kor = movie["title_kor"]
-        title_eng = movie["title_eng"]
-        poster_url = movie["poster_url"]
-        rating_aud = movie["rating_aud"]
-        rating_cri = movie["rating_cri"]
-        genre = movie["genre"]
-        showtimes = movie["showtimes"]
-        release_date = movie["release_date"]
-        rate = movie["movie"]
-        summary = movie["summary"]
-        staff_name = movie["staff"]["name"]
-        staff_role = movie["staff"]["role"]
-        staff_image_url = movie["staff"]["image_url"]
+        new_movie = Movie()
+        new_movie.title_kor = movie["title_kor"]
+        new_movie.title_eng = movie["title_eng"]
+        new_movie.poster_url = movie["poster_url"]
+        new_movie.rating_aud = movie["rating_aud"]
+        new_movie.rating_cri = movie["rating_cri"]
+        new_movie.genre = movie["genre"]
+        new_movie.showtimes = movie["showtimes"]
+        new_movie.release_date = movie["release_date"]
+        new_movie.rate = movie["rate"]
+        new_movie.summary = movie["summary"]
+        new_movie.save()
+        for staff in movie["staff"]:
+            new_staff = Staff()
+            new_staff.movie_title = new_movie
+            new_staff.name = staff["name"]
+            new_staff.role = staff["role"]
+            new_staff.image_url = staff["image_url"]
+            new_staff.save()
 
-        movie = {'title_kor': title_kor, 'title_eng':title_eng, 'poster_url':poster_url, 'rating_aud':rating_aud, 'rating_cri':rating_cri, 'genre':genre, 'showtimes':showtimes, 'release_date':release_date, 'rate':rate, 'summary':summary, 'name':staff_name, 'role':staff_role, 'image_url':staff_image_url}
-        
-        
+    return Response(status=status.HTTP_201_CREATED)
+
 
 
 '''

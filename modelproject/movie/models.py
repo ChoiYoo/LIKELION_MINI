@@ -26,7 +26,7 @@ class Staff(models.Model):
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True, null=False, blank=False)
-    movies = models.ForeignKey(Movies, null=False, blank=False, on_delete=models.CASCADE)
+    movies = models.ForeignKey(Movie, null=False, blank=False, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, null=False, blank=False, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, null=False, blank=False)
     comment = models.TextField()
