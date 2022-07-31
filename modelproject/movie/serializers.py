@@ -17,6 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class MovieSerializer(serializers.ModelSerializer):
     staffs = StaffSerializer(many=True)
+    comments = CommentSerializer(many=True)
     class Meta:
         model = Movie
         fields = '__all__'
