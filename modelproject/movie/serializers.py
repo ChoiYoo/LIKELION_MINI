@@ -9,7 +9,7 @@ class StaffSerializer(serializers.ModelSerializer):
         read_only_fields = ['movie_title']
 
 class CommentSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source = 'user.nickname')
+    user = serializers.ReadOnlyField(source = 'user.nickname') 
     class Meta:
         model = Comment
         fields = ['id', 'movies', 'user', 'created_at', 'comment']
