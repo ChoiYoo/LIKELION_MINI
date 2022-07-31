@@ -25,7 +25,7 @@ class Staff(models.Model):
     image_url = models.CharField(max_length=900)
 
 class Comment(models.Model):
-    id = models.AutoField(primary_key=True, null=False, blank=False)
+    id = models.AutoField(primary_key=True, null=False)
     movies = models.ForeignKey(Movie, null=False, blank=False, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, null=False, blank=False, on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True, null=False, blank=False)
