@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import CustomUser
 
 class Movie(models.Model):
-    title_kor = models.CharField(max_length=100)
+    title_kor = models.CharField(unique=True, max_length=100)
     title_eng = models.CharField(max_length=100)
     poster_url = models.CharField(max_length=900)
     rating_aud = models.CharField(max_length=50)

@@ -17,26 +17,29 @@ def init_db(request):
     res = requests.get(url)
     movies = res.json()['movies']
     for movie in movies:
-        new_movie = Movie()
-        new_movie.title_kor = movie["title_kor"]
-        new_movie.title_eng = movie["title_eng"]
-        new_movie.poster_url = movie["poster_url"]
-        new_movie.rating_aud = movie["rating_aud"]
-        new_movie.rating_cri = movie["rating_cri"]
-        new_movie.rating_net = movie["rating_net"]
-        new_movie.genre = movie["genre"]
-        new_movie.showtimes = movie["showtimes"]
-        new_movie.release_date = movie["release_date"]
-        new_movie.rate = movie["rate"]
-        new_movie.summary = movie["summary"]
-        new_movie.save()
-        for staff in movie["staff"]:
-            new_staff = Staff()
-            new_staff.movie_title = new_movie
-            new_staff.name = staff["name"]
-            new_staff.role = staff["role"]
-            new_staff.image_url = staff["image_url"]
-            new_staff.save()
+        try:
+            new_movie = Movie()
+            new_movie.title_kor = movie["title_kor"]
+            new_movie.title_eng = movie["title_eng"]
+            new_movie.poster_url = movie["poster_url"]
+            new_movie.rating_aud = movie["rating_aud"]
+            new_movie.rating_cri = movie["rating_cri"]
+            new_movie.rating_net = movie["rating_net"]
+            new_movie.genre = movie["genre"]
+            new_movie.showtimes = movie["showtimes"]
+            new_movie.release_date = movie["release_date"]
+            new_movie.rate = movie["rate"]
+            new_movie.summary = movie["summary"]
+            new_movie.save()
+            for staff in movie["staff"]:
+                new_staff = Staff()
+                new_staff.movie_title = new_movie
+                new_staff.name = staff["name"]
+                new_staff.role = staff["role"]
+                new_staff.image_url = staff["image_url"]
+                new_staff.save()
+        except:
+            continue
 
     return Response(status=status.HTTP_201_CREATED)
 

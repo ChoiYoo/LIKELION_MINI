@@ -1,6 +1,5 @@
 
 from rest_framework import serializers
-from dataclasses import field
 from .models import Movie, Staff, Comment
 
 class StaffSerializer(serializers.ModelSerializer):
