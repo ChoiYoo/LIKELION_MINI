@@ -3,10 +3,11 @@ from .models import Movie, Comment, Staff
 from .serializers import MovieSerializer, CommentSerializer, StaffSerializer
 from rest_framework.decorators import api_view, authentication_classes,permission_classes
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.db.models import Q
+from .permissions import IsOwnerOrReadOnly
 
 import requests
 
@@ -69,13 +70,12 @@ def get_one_movie(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-@permission_classes([IsAuthenticated])
-def post_one_comment(request):
-    serializer = CommentSerializer(data=request.data)
-    print(serializer)
-    if serializer.is_valid():
-        serializer.save(user=request.user)
-        return Response(serializer.data, status = status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class CommentViewSet(viewsets.ModelViewSet):
+    authentication_classes = [BasicAuthentication, SessionAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)
