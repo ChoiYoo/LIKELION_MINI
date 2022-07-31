@@ -9,12 +9,11 @@ class StaffSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['movie_title']
 
-class CommentSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source = 'user.nickname')
+class MovieSerializer(serializers.ModelSerializer):
+    staffs = StaffSerializer(many=True)
     class Meta:
-        model = Comment
+        model = Movie
         fields = '__all__'
-        read_only_fields = ['id']
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
