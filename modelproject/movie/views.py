@@ -12,7 +12,7 @@ import requests
 
 @api_view(['GET'])
 def init_db(request):
-    url = "https://334e6eae-a450-4bd1-93ba-cd6f24271194.mock.pstmn.io/movie/movielist"
+    url = "https://4026148c-8461-4a65-bbb5-bafce3e2e199.mock.pstmn.io/movie/movielist"
     res = requests.get(url)
     movies = res.json()['movies']
     for movie in movies:
@@ -74,6 +74,7 @@ def get_one_movie(request, pk):
 @permission_classes([IsAuthenticated])
 def post_one_comment(request):
     serializer = CommentSerializer(data=request.data)
+    print(serializer)
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response(serializer.data, status = status.HTTP_201_CREATED)
